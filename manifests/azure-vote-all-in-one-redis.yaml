@@ -18,7 +18,7 @@ spec:
       - name: azure-vote-back
         image: redis
         ports:
-        - containerPort: 8080
+        - containerPort: 6379
           name: redis
 ---
 apiVersion: v1
@@ -27,7 +27,7 @@ metadata:
   name: azure-vote-back
 spec:
   ports:
-  - port: 8080
+  - port: 6379
   selector:
     app: azure-vote-back
 ---
