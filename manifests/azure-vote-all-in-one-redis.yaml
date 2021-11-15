@@ -18,7 +18,7 @@ spec:
       - name: azure-vote-back
         image: redis
         ports:
-        - containerPort: 6379
+        - containerPort: 8080
           name: redis
 ---
 apiVersion: v1
@@ -27,7 +27,7 @@ metadata:
   name: azure-vote-back
 spec:
   ports:
-  - port: 6379
+  - port: 8080
   selector:
     app: azure-vote-back
 ---
@@ -54,7 +54,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: azure-vote-front
-        image: actionsaksacr.azurecr.io/myimage:v1
+        image: demoaksnov.azurecr.io/myimage:v1
         ports:
         - containerPort: 80
         resources:
