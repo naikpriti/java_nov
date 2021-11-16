@@ -25,8 +25,8 @@ jobs:
     
     # Container build and push to a Azure Container registry (ACR)
       - run: |
-          docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo:${{ github.sha }}
-          docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo:${{ github.sha }}
+          docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
+          docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
       
   build-and-push-helm-chart:
     name: Build and Push Helm Chart
@@ -37,7 +37,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
@@ -46,7 +46,7 @@ jobs:
         helm package ./charts/sample_chart
         helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
          #helm package  . test-image:v${{ github.run_id }}
-        helm push  /home/runner/work/javatest/javatest/webfront-0.1.0.tgz  oci://${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo/test-image:v${{ github.run_id }}
+        helm push  /home/runner/work/javatest/javatest/webfront-0.1.0.tgz  oci://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/test-image:v${{ github.run_id }}
         # list out saved charts
         #helm package list
       env:
