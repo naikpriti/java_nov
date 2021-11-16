@@ -38,7 +38,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}/helm/v1/repo --username ${{ secrets.ACR_USER }} --password ${{ secrets.ACR_SECRET }}
+        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
@@ -71,7 +71,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}/helm/v1/repo --username ${{ secrets.ACR_USER }} --password ${{ secrets.ACR_SECRET }}
+        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
         helm repo update
       env:
         HELM_EXPERIMENTAL_OCI: 1
@@ -79,9 +79,9 @@ jobs:
     - name: Helm Upgrade
       run: |
         mkdir upgrade
-        helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.ACR_USER }} --password ${{ secrets.ACR_SECRET }}
+        helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
         helm chart pull ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
-        helm chart export ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} --destination .\upgrade
+        helm chart export ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination .\upgrade
         helm upgrade ${{ secrets.IMAGE_NAME }} .\upgrade\${{ secrets.IMAGE_NAME }} -i
       env:
         KUBECONFIG: '.\kubeconfig'
