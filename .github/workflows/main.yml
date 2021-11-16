@@ -45,7 +45,8 @@ jobs:
         secret-name: ${{ env.REGISTRY_NAME }}-registry-connection
         namespace: ${{ env.NAMESPACE }}
         
-
+    - name: Build and Push Helm Chart
+      uses: actions/checkout@master
 
     - name: Helm Repo Add
       run: |
