@@ -16,7 +16,7 @@ image:
 
 # imagePullSecrets -- Defines secrets to use for pulling docker images..
 imagePullSecret: 
-  name: "regcred"
+  #name: "regcred"
   registry: demoaksnov.azurecr.io
   username:
   password:
