@@ -37,7 +37,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
@@ -72,7 +72,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}/test-demo/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
         helm repo update
       env:
         HELM_EXPERIMENTAL_OCI: 1
@@ -82,8 +82,8 @@ jobs:
         mkdir upgrade
         helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqx
         #docker pull demoaksnov.azurecr.io/webfront:v1
-        helm package pull ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
-        helm package export ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination .\upgrade
+        helm package pull ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm package export ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination .\upgrade
         helm upgrade ${{ secrets.IMAGE_NAME }} .\upgrade\${{ secrets.IMAGE_NAME }} -i
       env:
         KUBECONFIG: '.\kubeconfig'
