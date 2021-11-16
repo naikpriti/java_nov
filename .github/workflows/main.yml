@@ -45,15 +45,16 @@ jobs:
         secret-name: ${{ env.REGISTRY_NAME }}-registry-connection
         namespace: ${{ env.NAMESPACE }}
         
-    - name: 'Deploy'
-      working-directory: 'naikpriti/javatest@master'
-      run: |
-        helm upgrade pr-${{ github.event.pull_request.number }} dem0 \
-          --install \
-          --namespace pr-${{ github.event.pull_request.number }} \
-          --create-namespace \
-          --wait \
-          --set image.tag=pr-${{ github.event.pull_request.number }} \
+    - name: Install Helm
+      uses: azure/setup-helm@v1
+      with:
+          version: v3.4.1
+    
+    - name: Run chart-releaser
+      uses: helm/chart-releaser-action@v1.1.0
+      with:
+          charts_dir: charts
+      
 
 
     
