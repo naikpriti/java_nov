@@ -25,8 +25,8 @@ jobs:
     
     # Container build and push to a Azure Container registry (ACR)
       - run: |
-          docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
-          docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
+          docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo:${{ github.sha }}
+          docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo:${{ github.sha }}
       
   build-and-push-helm-chart:
     name: Build and Push Helm Chart
