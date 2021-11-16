@@ -44,10 +44,10 @@ jobs:
     - name: Helm Chart Save
       run: |
         helm package ./charts/sample_chart
-        helm chart save . ${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
-        helm chart save . ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm packagr save . ${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm package save . ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         # list out saved charts
-        helm chart list
+        helm package list
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
