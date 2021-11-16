@@ -3,7 +3,7 @@ replicaCount: 1
 
 app:
   # app.name -- Application name: Can be consistent between tracks. (required)
-  name: azure-vote-back
+  name: azure-vote-front
   # app.version -- Application version: Unique tag for this release. (required)
   #version: 1.0
 
