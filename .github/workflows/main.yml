@@ -2,7 +2,7 @@ on: [push]
 
   
 env:
-  dockerfilePath: 'naikpriti/javatest/Dockerfile'
+  dockerfilePath: '/javatest/Dockerfile'
   USER: ${{ secrets.REGISTRY_USERNAME }}
   TOKEN: ${{ secrets.REGISTRY_PASSWORD }}
   REPOSITORY: ${{ secrets.ACR_INSTANCE }}
@@ -44,7 +44,7 @@ jobs:
 
     - name: Helm Chart Save
       run: |
-        cd .\charts
+        cd charts/
         helm chart save . ${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         helm chart save . ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         # list out saved charts
