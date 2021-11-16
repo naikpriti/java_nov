@@ -45,33 +45,56 @@ jobs:
         secret-name: ${{ env.REGISTRY_NAME }}-registry-connection
         namespace: ${{ env.NAMESPACE }}
         
-    - name: Install Helm
-      uses: azure/setup-helm@v1
-      with:
-          version: v3.4.1
-    
-    - name: Run chart-releaser
-      uses: helm/chart-releaser-action@v1.1.0
-      with:
-          charts_dir: charts
+
+
+    - name: Helm Repo Add
+      run: |
+        helm repo add $${{ env.REGISTRY_NAME }} https://${{ env.REGISTRY_NAME }}/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
       env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        HELM_EXPERIMENTAL_OCI: 1
 
+    - name: Helm Chart Save
+      run: |
+        cd .\charts\sample-chart
+        helm chart save . ${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm chart save . ${{ env.REGISTRY_NAME }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        # list out saved charts
+        helm chart list
+      env:
+        HELM_EXPERIMENTAL_OCI: 1
 
-    - name: Helm Deploy Action
-  # You may pin to the exact commit or the version.
-  # uses: elseu/sdu-helm-deploy-action@bb7a3a203f6848f194feaf713dd58aac721cb197
-      uses: azure/setup-helm@v1
-      with:
-      # Helm release name. Will be combined with track if set. (required)
-        release: test-demo
-      # Kubernetes namespace name. (required)
-        namespace: default
-        # Helm chart path. If set to "app" this will use the built in helm chart found in this repository. (required)
-        chart: charts/sample_chart/
-        # Helm chart values, expected to be a YAML or JSON string.
+    - name: Helm Chart Push
+      run: |
+        helm registry login ${{ env.REGISTRY_NAME }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm chart push ${{ env.REGISTRY_NAME }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+      env:
+        HELM_EXPERIMENTAL_OCI: 1
         
 
+ 
+    - name: AKS Deployment
+      uses: actions/checkout@master
+
+    - name: kubeconfig
+      run: echo "${{ secrets.KUBECONFIG }}" >> kubeconfig
+
+    - name: Helm Repo Add
+      run: |
+          helm repo add ${{ env.REGISTRY_NAME }} https://${{ env.REGISTRY_NAME }}/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+          helm repo update
+      env:
+          HELM_EXPERIMENTAL_OCI: 1
+
+    - name: Helm Upgrade
+      run: |
+        mkdir upgrade
+        helm registry login ${{ env.REGISTRY_NAME }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm chart pull ${{ env.REGISTRY_NAME }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm chart export ${{ env.REGISTRY_NAME }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} --destination .\upgrade
+        helm upgrade ${{ secrets.IMAGE_NAME }} .\upgrade\${{ secrets.IMAGE_NAME }} -i
+      env:
+        KUBECONFIG: '.\kubeconfig'
+        HELM_EXPERIMENTAL_OCI: 1
     
     # Deploy app to AKS
     #- uses: azure/k8s-deploy@v1
