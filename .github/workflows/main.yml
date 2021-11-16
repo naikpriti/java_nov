@@ -46,14 +46,15 @@ jobs:
         namespace: ${{ env.NAMESPACE }}
         
     - name: 'Deploy'
-      uses: 'naikpriti/javatest@master'
-      with:
-        namespace: 'default'
-        chart: 'app'
-        token: '${{ github.token }}'
-        value-files:  "values.yaml" 
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+      working-directory: 'naikpriti/javatest@master'
+      run: |
+        helm upgrade pr-${{ github.event.pull_request.number }} dem0 \
+          --install \
+          --namespace pr-${{ github.event.pull_request.number }} \
+          --create-namespace \
+          --wait \
+          --set image.tag=pr-${{ github.event.pull_request.number }} \
+
 
     
     # Deploy app to AKS
