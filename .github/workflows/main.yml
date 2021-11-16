@@ -30,7 +30,7 @@ jobs:
           docker logout
   build-and-push-helm-chart:
     name: Build and Push Helm Chart
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     needs: [build-and-publish-docker-image]
     steps:
     - uses: actions/checkout@master
