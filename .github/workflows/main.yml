@@ -45,7 +45,7 @@ jobs:
       run: |
         helm package ./charts/sample_chart
         #helm package  . test-image:v${{ github.run_id }}
-        helm push  /home/runner/work/javatest/javatest/webfront-0.1.0.tgz  ${{ secrets.ACR_INSTANCE }}/helm/test-image:v${{ github.run_id }}
+        helm push  /home/runner/work/javatest/javatest/webfront-0.1.0.tgz  oci://${{ secrets.ACR_INSTANCE }}/helm/test-image:v${{ github.run_id }}
         # list out saved charts
         helm package list
       env:
