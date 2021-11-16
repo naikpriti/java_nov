@@ -44,14 +44,25 @@ jobs:
         container-registry-password: ${{ secrets.REGISTRY_PASSWORD }}
         secret-name: ${{ env.REGISTRY_NAME }}-registry-connection
         namespace: ${{ env.NAMESPACE }}
+        
+    - name: 'Deploy'
+      uses: 'naikpriti/javatest@master'
+      with:
+        namespace: 'default'
+        chart: 'app'
+        token: '${{ github.token }}'
+        value-files:  "values.yaml" 
+      env:
+        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+
     
     # Deploy app to AKS
-    - uses: azure/k8s-deploy@v1
-      with:
-        manifests: |
-          manifests/azure-vote-all-in-one-redis.yaml
-        images: |
-          ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
-        imagepullsecrets: |
-          ${{ env.REGISTRY_NAME }}-registry-connection
-        namespace: ${{ env.NAMESPACE }}
+    #- uses: azure/k8s-deploy@v1
+    #  with:
+    #    manifests: |
+    #      manifests/azure-vote-all-in-one-redis.yaml
+    #    images: |
+    #      ${{ env.REGISTRY_NAME }}.azurecr.io/myimage:${{ github.sha }}
+    #    imagepullsecrets: |
+    #      ${{ env.REGISTRY_NAME }}-registry-connection
+    #    namespace: ${{ env.NAMESPACE }}
