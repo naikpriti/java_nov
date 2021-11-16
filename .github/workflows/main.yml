@@ -43,7 +43,7 @@ jobs:
 
     - name: Helm Chart Save
       run: |
-        cd charts/
+        helm package .
         helm chart save . ${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         helm chart save . ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         # list out saved charts
@@ -79,6 +79,7 @@ jobs:
       run: |
         mkdir upgrade
         helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        #docker pull demoaksnov.azurecr.io/webfront:v1
         helm chart pull ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         helm chart export ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination .\upgrade
         helm upgrade ${{ secrets.IMAGE_NAME }} .\upgrade\${{ secrets.IMAGE_NAME }} -i
