@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-vote-back
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: azure-vote-back
+  template:
+    metadata:
+      labels:
+        app: azure-vote-back
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: azure-vote-back
+        image: redis
+        ports:
+        - containerPort: 6379
+          name: redis
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-vote-back
+spec:
+  ports:
+  - port: 6379
+  selector:
+    app: azure-vote-back
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: {{ .Values.app.name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: REDIS
+          value: "azure-vote-back"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app.name }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - port: {{ .Values.service.port }}
+  selector:
+    app: {{ .Values.app.name }}
