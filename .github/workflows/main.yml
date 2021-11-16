@@ -2,7 +2,6 @@ on: [push]
 
   
 env:
-  dockerfilePath: '/javatest/Dockerfile'
   USER: ${{ secrets.REGISTRY_USERNAME }}
   TOKEN: ${{ secrets.REGISTRY_PASSWORD }}
   REPOSITORY: ${{ secrets.ACR_INSTANCE }}
