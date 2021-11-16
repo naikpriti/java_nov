@@ -82,9 +82,9 @@ jobs:
         mkdir upgrade
         helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
         #docker pull demoaksnov.azurecr.io/webfront:v1
-        #docker pull ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        docker pull ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} --destination ./upgrade
         #helm package export ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination ./upgrade
-        helm install test13 ./upgrade/${{ secrets.IMAGE_NAME }} 
+        helm install ${{ secrets.IMAGE_NAME }} ./upgrade/${{ secrets.IMAGE_NAME }} 
         #helm install kamus soluto/kamus
       env:
         KUBECONFIG: /root/.kube/config
