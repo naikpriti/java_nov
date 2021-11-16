@@ -58,6 +58,20 @@ jobs:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
 
+    - name: Helm Deploy Action
+  # You may pin to the exact commit or the version.
+  # uses: elseu/sdu-helm-deploy-action@bb7a3a203f6848f194feaf713dd58aac721cb197
+      uses: azure/setup-helm@v1
+      with:
+      # Helm release name. Will be combined with track if set. (required)
+        release: test-demo
+      # Kubernetes namespace name. (required)
+        namespace: default
+        # Helm chart path. If set to "app" this will use the built in helm chart found in this repository. (required)
+        chart: charts/sample_chart/
+        # Helm chart values, expected to be a YAML or JSON string.
+        
+
     
     # Deploy app to AKS
     #- uses: azure/k8s-deploy@v1
