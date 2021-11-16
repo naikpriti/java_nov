@@ -86,5 +86,5 @@ jobs:
         helm package export ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination .\upgrade
         helm upgrade ${{ secrets.IMAGE_NAME }} .\upgrade\${{ secrets.IMAGE_NAME }} -i
       env:
-        KUBECONFIG: '.\kubeconfig'
+        KUBECONFIG: ${{ secrets.KUBECONFIG }}
         HELM_EXPERIMENTAL_OCI: 1
