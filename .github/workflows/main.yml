@@ -16,12 +16,19 @@ jobs:
     steps:
       - uses: actions/checkout@v2
     
-      - name: Build and push an image to container registry
-        run: |
-          docker login $env:REPOSITORY -u $env:USER --password $env:TOKEN
-          docker build --file=$env:dockerfilePath -t ${{ secrets.ACR_INSTANCE }}/${{ secrets.IMAGE_NAME }}:${{ github.run_id }} -t ${{ secrets.ACR_INSTANCE }}/${{ secrets.IMAGE_NAME }}:latest .
-          docker image push --all-tags ${{ secrets.ACR_INSTANCE }}/${{ secrets.IMAGE_NAME }}
-          docker logout
+  # Connect to Azure Container registry (ACR)
+      - name: Build and Publish Docker Image
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.ACR_INSTANCE }}.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }} 
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    # Container build and push to a Azure Container registry (ACR)
+      - run: |
+          docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
+          docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
+      
   build-and-push-helm-chart:
     name: Build and Push Helm Chart
     runs-on: ubuntu-latest
