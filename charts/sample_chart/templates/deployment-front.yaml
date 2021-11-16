@@ -18,7 +18,7 @@ spec:
         app: azure-vote-front
     spec:
       nodeSelector:
-        "beta.kubernetes.io/os": windows
+        "beta.kubernetes.io/os": linux
       containers:
       - name: azure-app-front
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
