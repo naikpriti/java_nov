@@ -44,6 +44,7 @@ jobs:
     - name: Helm Chart Save
       run: |
         helm package ./charts/sample_chart
+        docker-machine restart
         helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
          #helm package  . test-image:v${{ github.run_id }}
         helm push .  oci://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
