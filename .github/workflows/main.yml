@@ -45,18 +45,18 @@ jobs:
       run: |
         helm package ./charts/sample_chart
         helm package save . test-image:v${{ github.run_id }}
-        helm package save /home/runner/work/javatest/javatest/webfront-0.1.0.tgz  ${{ secrets.ACR_INSTANCE }}/helm/test-image:v${{ github.run_id }}
+        helm push  /home/runner/work/javatest/javatest/webfront-0.1.0.tgz  ${{ secrets.ACR_INSTANCE }}/helm/test-image:v${{ github.run_id }}
         # list out saved charts
         helm package list
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
-    - name: Helm Chart Push
-      run: |
-        helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.ACR_USER }} --password ${{ secrets.ACR_SECRET }}
-        helm package push ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
-      env:
-        HELM_EXPERIMENTAL_OCI: 1
+    #- name: Helm Chart Push
+    #  run: |
+     #   helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.ACR_USER }} --password ${{ secrets.ACR_SECRET }}
+      #  helm package push ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+     # env:
+       # HELM_EXPERIMENTAL_OCI: 1
         
   aks-deployment:
     name: AKS Deployment
