@@ -81,7 +81,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-          helm repo add $env:REGISTRY_NAME https://${{ env:REGISTRY_NAME }}/helm/v1/ --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+          helm repo add $env:REGISTRY_NAME https://$env:REGISTRY_NAME/helm/v1/ --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
           helm repo update
       env:
           HELM_EXPERIMENTAL_OCI: 1
