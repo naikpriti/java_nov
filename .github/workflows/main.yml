@@ -50,7 +50,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-        helm repo add $env.REGISTRY_NAME https://$env.REGISTRY_NAME/helm/v1/ --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm repo add $env:REGISTRY_NAME https://$env:REGISTRY_NAME/helm/v1/ --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
@@ -58,7 +58,7 @@ jobs:
       run: |
         cd .\charts\sample-chart
         helm chart save . ${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
-        helm chart save . $env.REGISTRY_NAME/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm chart save . $env:REGISTRY_NAME/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         # list out saved charts
         helm chart list
       env:
@@ -66,8 +66,8 @@ jobs:
 
     - name: Helm Chart Push
       run: |
-        helm registry login $env.REGISTRY_NAME --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
-        helm chart push $env.REGISTRY_NAME/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm registry login $env:REGISTRY_NAME --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm chart push $env:REGISTRY_NAME/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
       env:
         HELM_EXPERIMENTAL_OCI: 1
         
@@ -81,7 +81,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-          helm repo add $env.REGISTRY_NAME https://${{ env.REGISTRY_NAME }}/helm/v1/ --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+          helm repo add $env:REGISTRY_NAME https://${{ env:REGISTRY_NAME }}/helm/v1/ --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
           helm repo update
       env:
           HELM_EXPERIMENTAL_OCI: 1
@@ -89,9 +89,9 @@ jobs:
     - name: Helm Upgrade
       run: |
         mkdir upgrade
-        helm registry login $env.REGISTRY_NAME --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
-        helm chart pull $env.REGISTRY_NAME/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
-        helm chart export $env.REGISTRY_NAME }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} --destination .\upgrade
+        helm registry login $env:REGISTRY_NAME --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm chart pull $env:REGISTRY_NAME/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
+        helm chart export $env:REGISTRY_NAME }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} --destination .\upgrade
         helm upgrade ${{ secrets.IMAGE_NAME }} .\upgrade\${{ secrets.IMAGE_NAME }} -i
       env:
         KUBECONFIG: '.\kubeconfig'
