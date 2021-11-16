@@ -38,7 +38,7 @@ jobs:
 
     - name: Helm Repo Add
       run: |
-        helm repo add ${{ secrets.ACR_INSTANCE }} ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
+        helm repo add ${{ secrets.ACR_INSTANCE }} https://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/v1/repo --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
