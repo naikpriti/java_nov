@@ -15,15 +15,15 @@ image:
   pullPolicy: Always
 
 # imagePullSecrets -- Defines secrets to use for pulling docker images..
-imagePullSecret: 
+#imagePullSecret: 
   #name: "regcred"
-  registry: demoaksnov.azurecr.io
-  username:
+  #registry: demoaksnov.azurecr.io
+  ##username:
   password:
 
-env:
-  name: SPRING_PROFILES_ACTIVE
-  value: dev
+#env:
+  #name: SPRING_PROFILES_ACTIVE
+  #value: dev
 
 service:
   # service.enabled -- Enable service resource.
