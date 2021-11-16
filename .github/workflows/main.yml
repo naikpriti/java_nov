@@ -44,7 +44,8 @@ jobs:
     - name: Helm Chart Save
       run: |
         helm package ./charts/sample_chart
-        #helm package  . test-image:v${{ github.run_id }}
+        helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.ACR_USER }} --password ${{ secrets.ACR_SECRET }}
+         #helm package  . test-image:v${{ github.run_id }}
         helm push  /home/runner/work/javatest/javatest/webfront-0.1.0.tgz  oci://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
         # list out saved charts
         #helm package list
