@@ -25,8 +25,8 @@ jobs:
     
     # Container build and push to a Azure Container registry (ACR)
       - run: |
-          docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo:${{ github.sha }}
-          docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/test-demo:${{ github.sha }}
+          docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
+          docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
       
   build-and-push-helm-chart:
     name: Build and Push Helm Chart
@@ -46,10 +46,10 @@ jobs:
         helm package ./charts/sample_chart
         helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
         #helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
-         #helm package  . test-image:v${{ github.run_id }}
-        helm push webfront-0.1.0.tgz  oci://demoaksnov.azurecr.io/test-demo
+         #helm package  .test-image:v${{ github.run_id }}
+        helm push   oci://demoaksnov.azurecr.io/helm
         # list out saved charts
-        #helm package list
+        #helm package list/
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
@@ -85,7 +85,7 @@ jobs:
         #docker pull ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} .
         #helm package export ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination ./upgrade
         #helm install ${{ secrets.IMAGE_NAME }} ./upgrade/${{ secrets.IMAGE_NAME }}
-        docker pull demoaksnov.azurecr.io/webfront:v1 --destination ./upgrade 
+        docker pull  -d ./upgrade 
         helm install webfront ./upgrade/webfront
       env:
         KUBECONFIG: /root/.kube/config
