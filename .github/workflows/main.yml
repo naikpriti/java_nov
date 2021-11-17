@@ -27,9 +27,8 @@ jobs:
     # Container build and push to a Azure Container registry (ACR)
       - run: |
           docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
-          #docker build . -t ${{ secrets.ACR_INSTANCE }}/${{ secrets.IMAGE_NAME }}:${{ github.run_id }} -t ${{ secrets.ACR_INSTANCE }}/${{ secrets.IMAGE_NAME }}:latest .
           docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
-          #docker push --all-tags ${{ secrets.ACR_INSTANCE }}/${{ secrets.IMAGE_NAME }}
+
       
  build-and-push-helm-chart:
     name: Build and Push Helm Chart
@@ -47,25 +46,13 @@ jobs:
     - name: Helm Chart Save
       run: |
         helm package ./charts/sample_chart
-        #helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
         helm registry login ${{ secrets.ACR_INSTANCE }}.azurecr.io --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
-        #helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
-         #helm package  .test-image:v${{ github.run_id }}
-        #helm push webfront-0.1.0.tgz   oci://demoaksnov.azurecr.io/helm
-        # list out saved charts
-        #helm package list/
         helm push webfront-0.1.0.tgz oci://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm
         helm repo list
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
-    #- name: Helm Chart Push
-    #  run: |
-     #   helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.ACR_USER }} --password ${{ secrets.ACR_SECRET }}
-      #  helm package push ${{ secrets.ACR_INSTANCE }}/helm/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }}
-     # env:
-       # HELM_EXPERIMENTAL_OCI: 1
-        
+  
  aks-deployment:
     name: AKS Deployment
     runs-on: ubuntu-latest
@@ -87,17 +74,12 @@ jobs:
       run: |
         mkdir upgrade
         helm registry login ${{ secrets.ACR_INSTANCE }}.azurecr.io --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
-        #docker pull demoaksnov.azurecr.io/webfront:v1
-        #docker pull ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} .
-        #helm package export ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination ./upgrade
-        #helm install ${{ secrets.IMAGE_NAME }} ./upgrade/${{ secrets.IMAGE_NAME }}
         helm  pull  oci://${{ secrets.ACR_INSTANCE }}.azurecr.io/helm/webfront -d  ./upgrade  --version 0.1.0
         ls ./upgrade 
-        #tar -tvzf ./upgrade/webfront-0.1.0.tgz 
          az login --service-principal -u ${{ secrets.SERVICE_PRINCIPLE }} -p ${{ secrets.SERVICE_PASSWORD }} --tenant ${{ secrets.TENANT_ID }}
          az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
          az aks get-credentials --resource-group ${{ env.resource_group }} --name ${{ env.cluster_name }}
-        helm install nov2 ./upgrade/webfront-0.1.0.tgz
+        helm install nov3 ./upgrade/webfront-0.1.0.tgz
       env:
         #KUBECONFIG: ./root/.kube/config
         HELM_EXPERIMENTAL_OCI: 1
