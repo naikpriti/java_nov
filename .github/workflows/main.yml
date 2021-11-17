@@ -51,8 +51,8 @@ jobs:
         # list out saved charts
         #helm package list/
         mkdir first_chart
-        mv webfront-0.1.0.tgz first_chart/
-        helm repo index first_chart oci://demoaksnov.azurecr.io/helm
+        mv /home/runner/work/javatest/javatest/webfront-0.1.0.tgz first_chart/
+        helm repo index first_chart oci://demoaksnov.azurecr.io/helm/
         helm repo list
       env:
         HELM_EXPERIMENTAL_OCI: 1
