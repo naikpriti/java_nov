@@ -6,10 +6,9 @@ env:
   TOKEN: ${{ secrets.REGISTRY_PASSWORD }}
   REPOSITORY: ${{ secrets.ACR_INSTANCE }}
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
-  # This workflow contains a single job called "build"
-  build-and-publish-docker-image:
+ build-and-publish-docker-image:
     name: Build and Publish Docker Image
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +27,7 @@ jobs:
           docker build . -t ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
           docker push ${{ secrets.ACR_INSTANCE }}.azurecr.io/helm:${{ github.sha }}
       
-  build-and-push-helm-chart:
+ build-and-push-helm-chart:
     name: Build and Push Helm Chart
     runs-on: ubuntu-latest
     needs: [build-and-publish-docker-image]
@@ -44,14 +43,14 @@ jobs:
     - name: Helm Chart Save
       run: |
         helm package ./charts/sample_chart
-        mkdir first_chart
-        helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
+        #helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
+        helm registry login ${{ secrets.ACR_INSTANCE }}.azurecr.io --username ${{ secrets.REGISTRY_USERNAME } --password ${{ secrets.REGISTRY_PASSWORD }
         #helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
          #helm package  .test-image:v${{ github.run_id }}
         #helm push webfront-0.1.0.tgz   oci://demoaksnov.azurecr.io/helm
         # list out saved charts
         #helm package list/
-        helm push webfront-0.1.0.tgz oci://demoaksnov.azurecr.io/helm
+        helm push ${{ secrets.IMAGE_NAME }} oci://demoaksnov.azurecr.io/helm
         helm repo list
       env:
         HELM_EXPERIMENTAL_OCI: 1
@@ -63,7 +62,7 @@ jobs:
      # env:
        # HELM_EXPERIMENTAL_OCI: 1
         
-  aks-deployment:
+ aks-deployment:
     name: AKS Deployment
     runs-on: ubuntu-latest
     needs: [build-and-publish-docker-image,build-and-push-helm-chart]
