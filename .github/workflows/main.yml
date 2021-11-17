@@ -47,9 +47,13 @@ jobs:
         helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
         #helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
          #helm package  .test-image:v${{ github.run_id }}
-        helm push   oci://demoaksnov.azurecr.io/helm
+        #helm push webfront-0.1.0.tgz   oci://demoaksnov.azurecr.io/helm
         # list out saved charts
         #helm package list/
+        mkdir first_chart
+        mv webfront-0.1.0.tgz first_chart/
+        helm repo index first_chart oci://demoaksnov.azurecr.io/helm
+        helm repo list
       env:
         HELM_EXPERIMENTAL_OCI: 1
 
