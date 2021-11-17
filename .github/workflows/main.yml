@@ -44,7 +44,7 @@ jobs:
       run: |
         helm package ./charts/sample_chart
         #helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
-        helm registry login ${{ secrets.ACR_INSTANCE }}.azurecr.io --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }
+        helm registry login ${{ secrets.ACR_INSTANCE }}.azurecr.io --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
         #helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
          #helm package  .test-image:v${{ github.run_id }}
         #helm push webfront-0.1.0.tgz   oci://demoaksnov.azurecr.io/helm
