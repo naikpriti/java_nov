@@ -94,5 +94,5 @@ jobs:
          ls ./upgrade
         helm install webfront ./upgrade/webfront-0.1.0.tgz
       env:
-        KUBECONFIG: ${{ secrets.KUBECONFIG }}
+        KUBECONFIG: ./root/.kube/config
         HELM_EXPERIMENTAL_OCI: 1
