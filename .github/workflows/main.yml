@@ -95,7 +95,7 @@ jobs:
          az login --service-principal -u 9c98c05d-79f3-4ed9-a86b-bd60905d25db -p 9fnN.QK2t2WaSaKJrOUtCppJDoFC-Ax1-q --tenant a97a6880-5c33-4354-925a-f9f806acadea
          az account set --subscription 2d2449d2-a47e-4496-8377-be8b56f6b5c9
          az aks get-credentials --resource-group tstk8grp --name tstk8cluster
-        helm install webfront ./upgrade/webfront-0.1.0.tgz
+        helm install nov ./upgrade/webfront-0.1.0.tgz
       env:
-        KUBECONFIG: ./root/.kube/config
+        #KUBECONFIG: ./root/.kube/config
         HELM_EXPERIMENTAL_OCI: 1
