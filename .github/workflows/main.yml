@@ -52,7 +52,7 @@ jobs:
         #helm push webfront-0.1.0.tgz   oci://demoaksnov.azurecr.io/helm
         # list out saved charts
         #helm package list/
-        helm repo add first_chart oci://demoaksnov.azurecr.io/helm/v1/repo 
+        helm push first_chart/ oci://demoaksnov.azurecr.io/helm 
         helm repo list
       env:
         HELM_EXPERIMENTAL_OCI: 1
