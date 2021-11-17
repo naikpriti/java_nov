@@ -44,15 +44,15 @@ jobs:
     - name: Helm Chart Save
       run: |
         helm package ./charts/sample_chart
+        mkdir first_chart
+        mv /home/runner/work/javatest/javatest/webfront-0.1.0.tgz first_chart/
         helm registry login demoaksnov.azurecr.io --username demoaksnov --password O3qhiTvsIWaxipXqJ3nbdKX5+lp/xqxU
         #helm registry login ${{ secrets.ACR_INSTANCE }} --username ${{ secrets.REGISTRY_USERNAME }} --password ${{ secrets.REGISTRY_PASSWORD }}
          #helm package  .test-image:v${{ github.run_id }}
         #helm push webfront-0.1.0.tgz   oci://demoaksnov.azurecr.io/helm
         # list out saved charts
         #helm package list/
-        mkdir first_chart
-        mv /home/runner/work/javatest/javatest/webfront-0.1.0.tgz first_chart/
-        helm repo save first_chart oci://demoaksnov.azurecr.io/helm/v1/repo 
+        helm repo add first_chart oci://demoaksnov.azurecr.io/helm/v1/repo 
         helm repo list
       env:
         HELM_EXPERIMENTAL_OCI: 1
