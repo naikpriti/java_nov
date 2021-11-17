@@ -92,6 +92,8 @@ jobs:
         ls ./upgrade 
         tar -tvzf ./upgrade/webfront-0.1.0.tgz 
          ls ./upgrade
+         az account set --subscription 2d2449d2-a47e-4496-8377-be8b56f6b5c9
+         az aks get-credentials --resource-group tstk8grp --name tstk8cluster
         helm install webfront ./upgrade/webfront-0.1.0.tgz
       env:
         KUBECONFIG: ./root/.kube/config
