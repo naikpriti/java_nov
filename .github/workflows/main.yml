@@ -97,7 +97,7 @@ jobs:
          az login --service-principal -u ${{ secrets.SERVICE_PRINCIPLE }} -p ${{ secrets.SERVICE_PASSWORD }} --tenant ${{ secrets.TENANT_ID }}
          az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
          az aks get-credentials --resource-group ${{ env.resource_group }} --name ${{ env.cluster_name }}
-        helm install nov1 ./upgrade/webfront-0.1.0.tgz
+        helm install nov2 ./upgrade/webfront-0.1.0.tgz
       env:
         #KUBECONFIG: ./root/.kube/config
         HELM_EXPERIMENTAL_OCI: 1
