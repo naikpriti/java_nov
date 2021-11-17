@@ -90,7 +90,7 @@ jobs:
         #helm install ${{ secrets.IMAGE_NAME }} ./upgrade/${{ secrets.IMAGE_NAME }}
         helm  pull  oci://demoaksnov.azurecr.io/helm/webfront -d  ./upgrade  --version 0.1.0
         ls ./upgrade 
-        tar -xvzf /upgrade/webfront-0.1.0.tgz /upgrade/webfront
+        tar -xvzf ./upgrade/webfront-0.1.0.tgz ./upgrade/webfront
          ls ./upgrade
         helm install webfront ./upgrade/
       env:
