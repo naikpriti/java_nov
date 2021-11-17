@@ -88,7 +88,7 @@ jobs:
         #docker pull ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.IMAGE_NAME }}:v${{ github.run_id }} .
         #helm package export ${{ secrets.ACR_INSTANCE }}/test-demo/${{ secrets.REGISTRY_USERNAME }}:v${{ github.run_id }} --destination ./upgrade
         #helm install ${{ secrets.IMAGE_NAME }} ./upgrade/${{ secrets.IMAGE_NAME }}
-        helm  pull  oci://demoaksnov.azurecr.io/helm/webfront:0.1.0 -d ./upgrade 
+        helm  pull  oci://demoaksnov.azurecr.io/helm/webfront:0.1.0 -d  --version 0.1.0 ./upgrade
         helm install webfront ./upgrade/webfront
       env:
         KUBECONFIG: /root/.kube/config
